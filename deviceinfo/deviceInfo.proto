@@ -1,0 +1,35 @@
+syntax = "proto3";
+
+option go_package = "github.com/ckLearning/grpc/deviceinfo";
+
+import "google/protobuf/empty.proto";
+
+package deviceinfo;
+
+message ContainerDevice {
+   string paret_device_id = 1;
+   string mig_device_id = 2;
+}
+
+message ContainerDevices {
+    string container_name = 1;
+   repeated ContainerDevice container_devices = 2;
+}
+
+message PodDeviceInfo {
+    string pod_name = 1;
+   map<string, ContainerDevices> container_devices = 2;
+}
+
+message PodDeviceInfos {
+  map<string, PodDeviceInfo> pod_deviceinfos = 1;
+}
+
+service DeviceInfo {
+  rpc listAllMigDeviceInfos(google.protobuf.Empty) returns (PodDeviceInfos) {}
+
+  rpc watchMigDeviceInfos(google.protobuf.Empty) returns (stream PodDeviceInfos) {}
+}
+
+
+
